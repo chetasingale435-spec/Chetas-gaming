@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Chetas Gaming पर मुफ़्त मोबाइल ब्राउज़र गेम खेलें: Star Catcher, Snake और Quick Tap Challenge.">
+<meta name="theme-color" content="#10152f">
+<title>Chetas Gaming — Free Online Mini Games</title>
+<style>
+:root{--bg:#0b1027;--panel:#171e43;--pink:#ff60bf;--cyan:#56e8ff;--gold:#ffdb69;--text:#f7f8ff;--muted:#c5cdf8}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);background:radial-gradient(circle at 20% 0%,#353b85 0,#111632 45%,#080c1d 100%);min-height:100vh;padding:18px 12px 28px}
+header,main,footer{max-width:900px;margin:auto}header{text-align:center;padding:14px 0 22px}.brand{font-size:clamp(2.3rem,8vw,4.4rem);font-weight:1000;letter-spacing:-2px;line-height:1.1;background:linear-gradient(90deg,var(--gold),var(--pink),var(--cyan));background-clip:text;color:transparent;margin:6px 0}.tagline{color:var(--muted);margin:12px 0 0}
+.nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:18px 0 0}.nav button,.pill{border:1px solid #ffffff25;background:#ffffff0d;color:var(--text);border-radius:999px;padding:9px 14px;font-weight:750;cursor:pointer}.nav button.active{background:linear-gradient(90deg,var(--gold),var(--pink));color:#15152c;border:0}
+.panel{background:#171e43dc;border:1px solid #ffffff20;border-radius:23px;padding:16px;box-shadow:0 18px 60px #0004}.game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.game-card{border:1px solid #ffffff20;border-radius:18px;padding:16px;background:linear-gradient(145deg,#ffffff10,#ffffff04);display:flex;flex-direction:column;gap:10px;min-height:205px}.emoji{font-size:2.6rem}.game-card h2{margin:0;font-size:1.15rem}.game-card p{margin:0;color:var(--muted);font-size:.91rem;line-height:1.45;flex:1}.play,.primary{border:0;border-radius:999px;padding:12px 16px;background:linear-gradient(90deg,var(--gold),var(--pink));font-weight:900;color:#16152a;cursor:pointer}.secondary{border:1px solid #ffffff30;border-radius:999px;padding:10px 14px;background:#ffffff0c;color:var(--text);font-weight:750;cursor:pointer}
+#gameView{margin-top:16px;display:none}.gamehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}.gamehead h2{margin:0}.stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.stat{background:#ffffff0c;border:1px solid #ffffff15;border-radius:13px;padding:8px 12px;color:var(--muted)}.stat strong{color:var(--text);font-size:1.1rem}
+#arena{height:min(53vh,390px);min-height:280px;position:relative;overflow:hidden;border-radius:17px;border:1px solid #ffffff24;background:radial-gradient(circle at center,#2b3270,#10152f 78%);touch-action:manipulation}
+#overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;background:#0c1028b8;z-index:3}.overlay-title{font-size:1.55rem;font-weight:900;margin:0 0 8px}.overlay-copy{color:#d4dafc;max-width:370px;margin:0 0 16px}.star{position:absolute;border:0;background:transparent;font-size:42px;padding:6px;cursor:pointer;filter:drop-shadow(0 0 9px #ffd65a)}
+#snakeCanvas{display:block;width:100%;height:100%}.controls{display:grid;grid-template-columns:repeat(3,55px);gap:6px;justify-content:center;margin-top:12px}.controls button{height:44px;border:1px solid #ffffff30;background:#ffffff12;color:white;border-radius:12px;font-size:1.2rem}.controls .empty{visibility:hidden}
+.tap-area{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center;padding:20px}.tap-circle{width:145px;height:145px;border-radius:50%;border:0;background:radial-gradient(circle at 30% 25%,#fff4a4,#ff9f59 40%,#ff60bf 80%);font-size:2rem;font-weight:1000;color:#17152d;box-shadow:0 0 45px #ff60bf50;cursor:pointer}
+.note{color:var(--muted);font-size:.88rem;text-align:center;margin:12px 0 0}.info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.info article{background:#ffffff08;border:1px solid #ffffff15;border-radius:16px;padding:14px}.info h3{margin:0 0 6px;font-size:1rem}.info p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.5}footer{text-align:center;color:#929bd2;font-size:.82rem;padding:22px 0 4px}
+[hidden]{display:none!important}
+@media(max-width:650px){.game-grid{grid-template-columns:1fr}.game-card{min-height:170px}.info{grid-template-columns:1fr}.panel{padding:12px}.game-card{display:grid;grid-template-columns:auto 1fr;column-gap:13px}.game-card .emoji{grid-row:span 2}.game-card p{grid-column:2}.game-card .play{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">🎮 CHETAS GAMING</div>
+ <p class="tagline">छोटे गेम, बड़ा मज़ा! · मुफ़्त · मोबाइल पर भी खेलें</p>
+ <nav class="nav" aria-label="मुख्य मेन्यू">
+  <button class="active" data-page="home">🏠 होम</button>
+  <button data-game="star">⭐ Star Catcher</button>
+  <button data-game="snake">🐍 Snake</button>
+  <button data-game="tap">⚡ Quick Tap</button>
+ </nav>
+</header>
+<main>
+ <section id="home" class="panel">
+  <h1 style="margin:3px 0 7px">अपना गेम चुनो 👇</h1>
+  <p style="color:var(--muted);margin:0 0 16px">किसी गेम पर Play दबाओ और अपना हाई स्कोर बनाओ।</p>
+  <div class="game-grid">
+   <article class="game-card"><div class="emoji">⭐</div><h2>Star Catcher</h2><p>30 सेकंड में जितने सितारे पकड़ सकते हो, पकड़ो!</p><button class="play" data-game="star">Play Game ▶</button></article>
+   <article class="game-card"><div class="emoji">🐍</div><h2>Snake</h2><p>साँप को चलाओ, फल खाओ और दीवार से बचो।</p><button class="play" data-game="snake">Play Game ▶</button></article>
+   <article class="game-card"><div class="emoji">⚡</div><h2>Quick Tap</h2><p>30 सेकंड में जितनी बार हो सके, बटन टैप करो।</p><button class="play" data-game="tap">Play Game ▶</button></article>
+  </div>
+ </section>
+ <section id="gameView" class="panel">
+  <div class="gamehead"><h2 id="gameTitle">गेम</h2><button class="secondary" id="backBtn">← सभी गेम</button></div>
+  <div class="stats">
+   <div class="stat">स्कोर: <strong id="score">0</strong></div>
+   <div class="stat" id="timeStat">समय: <strong id="time">30</strong>s</div>
+   <div class="stat">हाई स्कोर: <strong id="best">0</strong></div>
+  </div>
+  <div id="arena">
+   <div id="overlay"><p class="overlay-title" id="overlayTitle">तैयार हो?</p><p class="overlay-copy" id="overlayCopy">गेम शुरू करने के लिए नीचे दबाओ।</p><button class="primary" id="startBtn">गेम शुरू करो ▶</button></div>
+   <canvas id="snakeCanvas" hidden></canvas>
+   <div id="tapContent" class="tap-area" hidden><button class="tap-circle" id="tapButton">TAP!</button><p id="tapHint">शुरू करने के बाद जितनी जल्दी हो सके टैप करो!</p></div>
+  </div>
+  <div id="snakeControls" class="controls" hidden>
+   <button class="empty" tabindex="-1">·</button><button data-dir="up" aria-label="ऊपर">⬆️</button><button class="empty" tabindex="-1">·</button>
+   <button data-dir="left" aria-label="बाएँ">⬅️</button><button data-dir="down" aria-label="नीचे">⬇️</button><button data-dir="right" aria-label="दाएँ">➡️</button>
+  </div>
+  <p class="note" id="gameNote">मोबाइल पर टैप करो या कंप्यूटर पर क्लिक करो।</p>
+ </section>
+ <div class="info">
+  <article><h3>📱 मोबाइल-फ्रेंडली</h3><p>गेम फोन और कंप्यूटर के ब्राउज़र में चलते हैं। Snake में स्क्रीन के बटन इस्तेमाल कर सकते हो।</p></article>
+  <article><h3>🏆 हाई स्कोर</h3><p>इस डिवाइस के ब्राउज़र में हर गेम का बेस्ट स्कोर सेव होता है।</p></article>
+ </div>
+</main>
+<footer>© <span id="year"></span> Chetas Gaming · Made for fun ✨</footer>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+$('year').textContent=new Date().getFullYear();
+const home=$('home'),view=$('gameView'),arena=$('arena'),overlay=$('overlay');
+let game='star',score=0,time=30,timer=null,running=false,star=null,taps=0;
+let snake=[],food={},dir={x:1,y:0},nextDir={x:1,y:0},snakeLoop=null,cell=20,cols=20,rows=16;
+const gameNames={star:'⭐ Star Catcher',snake:'🐍 Snake',tap:'⚡ Quick Tap'};
+function bestKey(g){return 'chetasGamingBest_'+g}
+function getBest(g){try{return Number(localStorage.getItem(bestKey(g))||0)}catch(e){return 0}}
+function setBest(g,n){try{localStorage.setItem(bestKey(g),String(n))}catch(e){}}
+function refreshStats(){ $('score').textContent=score;$('time').textContent=time;$('best').textContent=getBest(game)}
+function clearGame(){running=false;clearInterval(timer);clearInterval(snakeLoop);timer=null;snakeLoop=null;if(star){star.remove();star=null}}
+function showOverlay(t,c,b='फिर से खेलें ↻'){overlay.style.display='flex';$('overlayTitle').textContent=t;$('overlayCopy').textContent=c;$('startBtn').textContent=b}
+function choose(g){
+ clearGame();game=g;score=0;time=30;refreshStats();home.hidden=true;view.style.display='block';$('gameTitle').textContent=gameNames[g];
+ $('snakeCanvas').hidden=g!=='snake';$('tapContent').hidden=g!=='tap';$('snakeControls').hidden=g!=='snake';$('timeStat').hidden=g==='snake';
+ [...arena.querySelectorAll('.star')].forEach(e=>e.remove());star=null;
+ if(g==='snake'){$('gameNote').textContent='तीर वाले बटन या keyboard के arrow keys इस्तेमाल करो।';}
+ else if(g==='tap'){$('gameNote').textContent='30 सेकंड में सबसे ज़्यादा टैप करने की कोशिश करो।';}
+ else {$('gameNote').textContent='सितारे पर जल्दी-जल्दी टैप करो। हर सितारे का 1 पॉइंट!';}
+ showOverlay('तैयार हो, ब्रो? 🚀',g==='star'?'30 सेकंड में जितने हो सकें उतने सितारे पकड़ो!':g==='snake'?'फल खाओ और अपनी पूँछ व दीवार से बचो!':'30 सेकंड में TAP बटन जितनी बार हो सके दबाओ।','गेम शुरू करो ▶');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.game===g));
+}
+function backHome(){clearGame();view.style.display='none';home.hidden=false;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page==='home'))}
+function finish(msg){
+ if(!running)return;running=false;clearInterval(timer);clearInterval(snakeLoop);timer=null;snakeLoop=null;
+ if(score>getBest(game))setBest(game,score);refreshStats();
+ showOverlay(msg||'गेम खत्म! 🎮',`तुमने ${score} पॉइंट बनाए। ${score>=20?'वाह, शानदार स्कोर!':'फिर से खेलो और अपना रिकॉर्ड तोड़ो!'}`);
+}
+function updateScore(n){score=n;refreshStats()}
+function start(){
+ clearGame();score=0;time=30;running=true;refreshStats();overlay.style.display='none';
+ if(game==='star'){spawnStar();timer=setInterval(()=>{time--;refreshStats();if(time<=0)finish('समय पूरा! 🏁')},1000)}
+ else if(game==='tap'){taps=0;$('tapHint').textContent='चलो, टैप करो!';timer=setInterval(()=>{time--;refreshStats();if(time<=0)finish('टैप चैलेंज खत्म! ⚡')},1000)}
+ else startSnake();
+}
+function spawnStar(){
+ if(!running||game!=='star')return;if(star)star.remove();
+ star=document.createElement('button');star.className='star';star.type='button';star.textContent=['⭐','🌟','✨'][Math.floor(Math.random()*3)];star.setAttribute('aria-label','सितारा पकड़ें');
+ star.style.left=Math.random()*Math.max(0,arena.clientWidth-65)+'px';star.style.top=Math.random()*Math.max(0,arena.clientHeight-65)+'px';
+ star.addEventListener('click',()=>{if(running){updateScore(score+1);spawnStar()}});arena.appendChild(star)
+}
+function drawSnake(){
+ const c=$('snakeCanvas'),ctx=c.getContext('2d'),rect=arena.getBoundingClientRect();
+ const dpr=window.devicePixelRatio||1;c.width=Math.floor(rect.width*dpr);c.height=Math.floor(rect.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+ const w=rect.width,h=rect.height;cell=Math.max(12,Math.floor(Math.min(w/cols,h/rows)));cols=Math.floor(w/cell);rows=Math.floor(h/cell);
+ ctx.fillStyle='#111735';ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle='#ffffff0b';for(let x=0;x<w;x+=cell){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=cell){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+ ctx.fillStyle='#ffcc5b';ctx.font=`${cell*.8}px sans-serif`;ctx.fillText('🍎',food.x*cell+1,food.y*cell+cell*.85);
+ snake.forEach((p,i)=>{ctx.fillStyle=i===0?'#58edc3':'#39b7a4';ctx.beginPath();ctx.roundRect(p.x*cell+1,p.y*cell+1,cell-2,cell-2,5);ctx.fill()});
+}
+function placeFood(){do{food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}}while(snake.some(p=>p.x===food.x&&p.y===food.y))}
+function startSnake(){
+ const c=$('snakeCanvas'),rect=arena.getBoundingClientRect();cell=20;cols=Math.max(8,Math.floor(rect.width/cell));rows=Math.max(8,Math.floor(rect.height/cell));
+ snake=[{x:Math.floor(cols/2),y:Math.floor(rows/2)},{x:Math.floor(cols/2)-1,y:Math.floor(rows/2)},{x:Math.floor(cols/2)-2,y:Math.floor(rows/2)}];dir={x:1,y:0};nextDir={x:1,y:0};placeFood();drawSnake();
+ snakeLoop=setInterval(()=>{
+  if(!running)return;dir=nextDir;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+  if(head.x<0||head.y<0||head.x>=cols||head.y>=rows||snake.some(p=>p.x===head.x&&p.y===head.y)){finish('ओह! साँप टकरा गया 🐍');return}
+  snake.unshift(head);if(head.x===food.x&&head.y===food.y){updateScore(score+1);placeFood()}else snake.pop();drawSnake();
+ },145);
+}
+function setDirection(d){
+ const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}},v=dirs[d];if(!v)return;
+ if(v.x===-dir.x&&v.y===-dir.y)return;nextDir=v;
+}
+$('startBtn').addEventListener('click',start);$('backBtn').addEventListener('click',backHome);
+document.querySelectorAll('[data-game]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.game)));
+document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>setDirection(b.dataset.dir)));
+document.addEventListener('keydown',e=>{const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};if(game==='snake'&&map[e.key]){e.preventDefault();setDirection(map[e.key])}});
+$('tapButton').addEventListener('click',()=>{if(running&&game==='tap'){updateScore(score+1);$('tapHint').textContent='शाबाश! टैप करते रहो!'}});
+window.addEventListener('resize',()=>{if(game==='snake'&&running)drawSnake()});
+document.querySelector('[data-page="home"]').addEventListener('click',backHome);
+})();
+</script>
+</body>
+</html>

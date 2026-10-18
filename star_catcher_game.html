@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Star Catcher एक मज़ेदार और मुफ़्त मोबाइल गेम है। सितारे पकड़ो, स्कोर बनाओ और अपना हाई स्कोर तोड़ो।">
+<meta name="theme-color" content="#10152f">
+<title>Star Catcher — Free Online Game</title>
+<style>
+:root{--bg:#10152f;--panel:#1b2250;--pink:#ff5bbd;--cyan:#57e8ff;--gold:#ffd65a;--white:#f7f8ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--white);background:radial-gradient(circle at 20% 0%,#333a83 0,#10152f 48%,#090d20 100%);display:flex;flex-direction:column;align-items:center;padding:22px 14px}
+header{text-align:center;max-width:760px;width:100%}.logo{font-size:clamp(2.2rem,8vw,4.2rem);font-weight:950;letter-spacing:-2px;margin:8px 0;background:linear-gradient(90deg,var(--gold),var(--pink),var(--cyan));color:transparent;background-clip:text}.sub{color:#c8cffc;margin:0 0 20px}
+main{width:100%;max-width:760px}.panel{background:#171d43d9;border:1px solid #ffffff20;border-radius:24px;padding:18px;box-shadow:0 18px 60px #0005;backdrop-filter:blur(8px)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.stat{background:#ffffff0b;border:1px solid #ffffff12;border-radius:15px;padding:10px;text-align:center}.stat small{display:block;color:#b9c3f8;font-size:.8rem}.stat strong{font-size:1.45rem}
+#arena{height:min(55vh,390px);min-height:280px;position:relative;overflow:hidden;border-radius:18px;border:1px solid #ffffff24;background:radial-gradient(circle at 50% 50%,#282f70,#10152f 75%);touch-action:manipulation}
+.star{position:absolute;border:0;background:transparent;font-size:42px;line-height:1;cursor:pointer;filter:drop-shadow(0 0 10px #ffd65a);padding:8px;user-select:none;animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.3) rotate(-35deg)}to{transform:scale(1) rotate(0)}}
+#overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:#0c1028a8}.overlay-title{font-size:1.7rem;font-weight:850;margin:0 0 8px}.overlay-copy{color:#d4dafc;max-width:340px;margin:0 0 18px}
+button.action{border:0;border-radius:999px;padding:13px 24px;font-size:1rem;font-weight:850;color:#14152c;background:linear-gradient(90deg,var(--gold),var(--pink));cursor:pointer;box-shadow:0 6px 22px #ff5bbd40}button.action:active{transform:scale(.98)}
+.hint{text-align:center;color:#c3caf5;font-size:.9rem;margin:13px 0 2px}.below{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.mini{background:#ffffff08;border:1px solid #ffffff15;border-radius:16px;padding:14px}.mini h2{font-size:1rem;margin:0 0 6px}.mini p{font-size:.9rem;color:#c8cffc;margin:0;line-height:1.5}
+footer{color:#8993ce;text-align:center;font-size:.8rem;margin:22px 0 4px}
+@media(max-width:480px){body{padding:14px 10px}.panel{padding:12px}.below{grid-template-columns:1fr}.stat strong{font-size:1.2rem}#arena{min-height:300px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⭐ STAR CATCHER</div>
+  <p class="sub">सितारे पकड़ो • हाई स्कोर बनाओ • मज़े करो!</p>
+</header>
+<main>
+ <section class="panel" aria-label="Star Catcher game">
+  <div class="stats">
+   <div class="stat"><small>स्कोर</small><strong id="score">0</strong></div>
+   <div class="stat"><small>समय</small><strong><span id="time">30</span>s</strong></div>
+   <div class="stat"><small>हाई स्कोर</small><strong id="best">0</strong></div>
+  </div>
+  <div id="arena" aria-label="Game area">
+   <div id="overlay">
+    <p class="overlay-title" id="overlayTitle">तैयार हो, ब्रो? 🚀</p>
+    <p class="overlay-copy" id="overlayCopy">30 सेकंड में जितने हो सकें उतने सितारों पर टैप करो। जल्दी करो!</p>
+    <button class="action" id="startBtn">गेम शुरू करो ▶</button>
+   </div>
+  </div>
+  <p class="hint">⭐ सितारे पर टैप करो — हर सितारे के 1 पॉइंट!</p>
+ </section>
+ <div class="below">
+  <section class="mini"><h2>🎮 कैसे खेलें?</h2><p>गेम शुरू करो और मैदान में दिखने वाले सितारे को जल्दी-जल्दी टैप करो। 30 सेकंड में अपना बेस्ट स्कोर बनाओ।</p></section>
+  <section class="mini"><h2>🌟 अपना चैलेंज</h2><p>क्या तुम 20 से ज़्यादा पॉइंट बना सकते हो? दोबारा खेलो और अपना हाई स्कोर तोड़ो!</p></section>
+ </div>
+</main>
+<footer>Star Catcher • मुफ़्त ब्राउज़र गेम • मोबाइल और कंप्यूटर पर खेलें</footer>
+<script>
+(()=> {
+ const arena=document.getElementById('arena'),overlay=document.getElementById('overlay');
+ const scoreEl=document.getElementById('score'),timeEl=document.getElementById('time'),bestEl=document.getElementById('best');
+ const startBtn=document.getElementById('startBtn'),title=document.getElementById('overlayTitle'),copy=document.getElementById('overlayCopy');
+ let score=0,time=30,timer=null,running=false,star=null;
+ let best=0; try{best=Number(localStorage.getItem('starCatcherBest')||0)}catch(e){}
+ bestEl.textContent=best;
+ function removeStar(){if(star){star.remove();star=null}}
+ function spawnStar(){
+  removeStar(); if(!running)return;
+  star=document.createElement('button');star.className='star';star.type='button';star.textContent=['⭐','🌟','✨'][Math.floor(Math.random()*3)];star.setAttribute('aria-label','सितारा पकड़ें');
+  const maxX=Math.max(0,arena.clientWidth-66),maxY=Math.max(0,arena.clientHeight-66);
+  star.style.left=(Math.random()*maxX)+'px';star.style.top=(Math.random()*maxY)+'px';
+  star.addEventListener('click',()=>{if(!running)return;score++;scoreEl.textContent=score;spawnStar()});
+  arena.appendChild(star);
+ }
+ function endGame(){
+  running=false;clearInterval(timer);removeStar();overlay.style.display='flex';
+  title.textContent=score>=20?'वाह! कमाल कर दिया! 🏆':'गेम खत्म! 🎮';
+  copy.textContent=`तुमने ${score} पॉइंट बनाए। ${score>best?'नया हाई स्कोर! फिर से खेलकर अपना रिकॉर्ड बनाओ।':'एक बार और खेलो और अपना हाई स्कोर तोड़ो!'}`;
+  if(score>best){best=score;bestEl.textContent=best;try{localStorage.setItem('starCatcherBest',String(best))}catch(e){}}
+  startBtn.textContent='फिर से खेलें ↻';
+ }
+ function startGame(){
+  clearInterval(timer);removeStar();score=0;time=30;running=true;scoreEl.textContent=score;timeEl.textContent=time;overlay.style.display='none';spawnStar();
+  timer=setInterval(()=>{time--;timeEl.textContent=time;if(time<=0)endGame()},1000);
+ }
+ startBtn.addEventListener('click',startGame);
+})();
+</script>
+</body>
+</html>
